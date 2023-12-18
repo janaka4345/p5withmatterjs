@@ -5,8 +5,11 @@ import { boxy } from "../objects/box";
 
 let boxA;
 // let ground;
+let boxBodyArray;
 let engine;
+let boxArray = [];
 export default function Canvas2() {
+  boxBodyArray = useRef([]);
   // const scene = useRef();
   engine = useRef(Engine.create());
   useEffect(() => {
@@ -27,7 +30,7 @@ export default function Canvas2() {
     // boundaries
     // create two boxes and a ground
 
-    boxA = Bodies.rectangle(200, 100, 80, 80);
+    // boxA = Bodies.rectangle(200, 100, 80, 80);
     // blockA = new Block(world, { x: 200, y: 200, w: 80, h: 80, color: "white" });
     // blockB = new Block(world, { x: 270, y: 50, w: 160, h: 80, color: "white" });
     // ground = new Block(world, { x: 400, y: 500, w: 810, h: 15, color: 'grey' }, { isStatic: true, angle: PI/36 });
@@ -37,7 +40,7 @@ export default function Canvas2() {
 
     // // add all of the bodies to the world
     // Composite.add(engine.current.world, [boxA]);
-    World.add(engine.current.world, [boxA]);
+    // World.add(engine.current.world, [boxA]);
 
     // run the engine
     // Engine.run(engine.current);
@@ -53,7 +56,7 @@ export default function Canvas2() {
       // Render.stop(render);
       Runner.stop(runner);
       Engine.clear(engine.current);
-      World.remove(engine.current.world, [boxA]);
+      World.remove(engine.current.world, []);
       World.clear(engine.current.world);
       // render.canvas.remove();
       // render.canvas = null;
@@ -61,6 +64,7 @@ export default function Canvas2() {
       // render.textures = {};
     };
   }, []);
+  useEffect(() => {}, []);
   return (
     <>
       <div style={{ width: 400, height: 400 }}>
@@ -76,7 +80,12 @@ function setup(p5) {
 }
 
 function draw(p5) {
+  // console.log(p5);
   return () => {
+    // p5.mousePressed(() => {
+    //   console.log("lk");
+    // });
+
     // console.log(boxA.position.x, boxA.position.y);
     p5.background(0);
 
@@ -84,7 +93,10 @@ function draw(p5) {
     // p5.rectMode("CENTER");
     // p5.fill(255, 204, 0);
     // p5.rect(0, 0, 80, 80);
-    boxy(p5, boxA.position.x, boxA.position.y, 80, 80);
+    boxArray.forEach((box, i) => {
+      boxy(p5, boxBodyArray.current[i].x, boxBodyArray.current[i].y, 20, 20);
+    });
+    // boxy(p5, boxA.position.x, boxA.position.y, 80, 80);
     // p5.rect(0, 250, 100, 100);
     // p5.fill(255, 204, 0);
     // p5.rect(ground.position.x, ground.position.y, 50, 50);
@@ -106,4 +118,21 @@ function sketch(p5) {
   p5.preload = preload(p5);
   p5.setup = setup(p5);
   p5.draw = draw(p5);
+  p5.mousePressed = () => mousePressed(p5);
+}
+function mousePressed(p5) {
+  const box = Bodies.rectangle(p5.mouseX, p5.mouseY, 80, 80);
+  boxBodyArray.current.push(box);
+  console.log(engine.current.world);
+  console.log("b", boxArray);
+  World.add(
+    engine.current.world,
+    boxBodyArray.current[boxBodyArray.current.length - 1],
+  );
+  boxArray.push({
+    x: boxBodyArray.current[boxBodyArray.current.length - 1].position.x,
+    y: boxBodyArray.current[boxBodyArray.current.length - 1].position.y,
+  });
+  // mousePointer.current.x = p5.mouseX;
+  // mousePointer.current.y = p5.mouseY;
 }
