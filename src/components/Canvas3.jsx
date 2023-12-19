@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
-import { Engine, Render, Bodies, World } from "matter-js";
+import { Engine, Render, Bodies, World, Runner } from "matter-js";
 
 function Canvas3(props) {
+  console.log("kl");
   const scene = useRef();
   const isPressed = useRef(false);
   const engine = useRef(Engine.create());
@@ -27,8 +28,9 @@ function Canvas3(props) {
       Bodies.rectangle(cw / 2, ch + 10, cw, 20, { isStatic: true }),
       Bodies.rectangle(cw + 10, ch / 2, 20, ch, { isStatic: true }),
     ]);
-
-    Engine.run(engine.current);
+    const runner = Runner.create();
+    Runner.run(runner, engine.current);
+    // Engine.run(engine.current);
     Render.run(render);
 
     return () => {
@@ -63,7 +65,7 @@ function Canvas3(props) {
           render: {
             fillStyle: "#0000ff",
           },
-        }
+        },
       );
       World.add(engine.current.world, [ball]);
     }
