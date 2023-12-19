@@ -21,7 +21,7 @@ export default function Canvas2() {
     // boxA = Bodies.rectangle(200, 100, 80, 80);
 
     // var boxB = Bodies.rectangle(450, 50, 80, 80);
-    ground = Bodies.rectangle(50, 300, 200, 50, { isStatic: true });
+    ground = Bodies.rectangle(200, 300, 200, 50, { isStatic: true });
 
     // // add all of the bodies to the world
     // Composite.add(engine.current.world, [boxA]);
@@ -50,7 +50,7 @@ export default function Canvas2() {
   useEffect(() => {}, []);
   return (
     <>
-      <div style={{ width: 400, height: 800 }}>
+      <div style={{ width: 800, height: 800, border: "2px solid red" }}>
         <ReactP5Wrapper sketch={sketch} />
       </div>
     </>
@@ -58,13 +58,13 @@ export default function Canvas2() {
 }
 function setup(p5) {
   return () => {
-    p5.createCanvas(400, 800);
+    p5.createCanvas(800, 800);
   };
 }
 
 function draw(p5) {
   return () => {
-    p5.background(0);
+    p5.background(255);
     // p5.rect(100, 100, 100, 100);
     // p5.rectMode("CENTER");
     p5.fill(255, 204, 0);
@@ -75,13 +75,14 @@ function draw(p5) {
         //   boxBodyArray.current[i].position.x,
         //   boxBodyArray.current[i].position.y
         // );
-        boxy(
-          p5,
-          boxBodyArray.current[i].position.x,
-          boxBodyArray.current[i].position.y,
-          20,
-          20
-        );
+        boxy(p5, box.position.x, box.position.y, 20, 20);
+        // p5.line(
+        //   box.vertices[0],
+        //   box.vertices[1],
+        //   box.vertices[2],
+        //   box.vertices[3]
+        // );
+        // p5.stroke(0, 0, 255);
         p5.stroke(0, 0, 255);
         p5.noFill();
         p5.rect(
@@ -102,7 +103,6 @@ function draw(p5) {
     }
     p5.stroke(255, 0, 0);
     p5.noFill();
-    // p5.rect(ground.position.x, ground.position.y, 200, 80);
     p5.rect(
       ground.position.x,
       ground.position.y,
@@ -117,6 +117,13 @@ function draw(p5) {
       ground.bounds.min.x,
       ground.bounds.min.y
     );
+    // p5.line(
+    //   ground.vertices[0],
+    //   ground.vertices[1],
+    //   ground.vertices[2],
+    //   ground.vertices[3]
+    // );
+    // p5.stroke(255, 0, 255);
 
     // p5.noLoop();
   };
@@ -143,6 +150,6 @@ function mousePressed(p5) {
     engine.current.world,
     boxBodyArray.current[boxBodyArray.current.length - 1]
   );
-  console.log(Composite.bodies);
-  console.log(ground);
+  console.log(boxBodyArray.current);
+  // console.log(ground);
 }
