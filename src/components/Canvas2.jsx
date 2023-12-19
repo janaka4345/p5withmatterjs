@@ -1,12 +1,13 @@
 import { ReactP5Wrapper } from "@p5-wrapper/react";
 import { useEffect, useRef } from "react";
-import { Engine, Runner, World, Bodies } from "matter-js";
+import { Engine, Runner, Bodies, Composite } from "matter-js";
 import { boxy } from "../objects/box";
 
 let boxA;
 let ground;
 let boxBodyArray;
 let engine;
+let composite;
 export default function Canvas2() {
   boxBodyArray = useRef([]);
   // const scene = useRef();
@@ -24,7 +25,8 @@ export default function Canvas2() {
 
     // // add all of the bodies to the world
     // Composite.add(engine.current.world, [boxA]);
-    World.add(engine.current.world, ground);
+    composite = Composite.create();
+    Composite.add(engine.current.world, ground);
 
     // run the engine
     // Engine.run(engine.current);
@@ -37,8 +39,8 @@ export default function Canvas2() {
       // Render.stop(render);
       Runner.stop(runner);
       Engine.clear(engine.current);
-      World.remove(engine.current.world, []);
-      World.clear(engine.current.world);
+      Composite.remove(engine.current.world, []);
+      // Composite.clear(engine.current.world);
       // render.canvas.remove();
       // render.canvas = null;
       // render.context = null;
@@ -48,7 +50,7 @@ export default function Canvas2() {
   useEffect(() => {}, []);
   return (
     <>
-      <div style={{ width: 400, height: 400 }}>
+      <div style={{ width: 400, height: 800 }}>
         <ReactP5Wrapper sketch={sketch} />
       </div>
     </>
@@ -56,34 +58,65 @@ export default function Canvas2() {
 }
 function setup(p5) {
   return () => {
-    p5.createCanvas(400, 400);
+    p5.createCanvas(400, 800);
   };
 }
 
 function draw(p5) {
   return () => {
-    console.log(engine.current.world);
     p5.background(0);
     // p5.rect(100, 100, 100, 100);
     // p5.rectMode("CENTER");
-    // p5.fill(255, 204, 0);
-    // p5.rect(0, 0, 80, 80);
+    p5.fill(255, 204, 0);
+    p5.rect(ground.position.x, ground.position.y, 200, 50);
     if (boxBodyArray.current) {
       boxBodyArray.current.forEach((box, i) => {
-        console.log(
-          boxBodyArray.current[i].position.x,
-          boxBodyArray.current[i].position.y,
-        );
+        // console.log(
+        //   boxBodyArray.current[i].position.x,
+        //   boxBodyArray.current[i].position.y
+        // );
         boxy(
           p5,
           boxBodyArray.current[i].position.x,
           boxBodyArray.current[i].position.y,
           20,
-          20,
+          20
+        );
+        p5.stroke(0, 0, 255);
+        p5.noFill();
+        p5.rect(
+          box.position.x,
+          box.position.y,
+          box.bounds.min.x,
+          box.bounds.min.y
+        );
+        p5.stroke(255, 0, 0);
+        p5.noFill();
+        p5.rect(
+          box.position.x,
+          box.position.y,
+          box.bounds.max.x,
+          box.bounds.max.y
         );
       });
     }
-    p5.rect(ground.position.x, ground.position.y, 200, 50);
+    p5.stroke(255, 0, 0);
+    p5.noFill();
+    // p5.rect(ground.position.x, ground.position.y, 200, 80);
+    p5.rect(
+      ground.position.x,
+      ground.position.y,
+      ground.bounds.max.x,
+      ground.bounds.max.y
+    );
+    p5.stroke(0, 0, 255);
+    p5.noFill();
+    p5.rect(
+      ground.position.x,
+      ground.position.y,
+      ground.bounds.min.x,
+      ground.bounds.min.y
+    );
 
     // p5.noLoop();
   };
@@ -106,8 +139,10 @@ function mousePressed(p5) {
   const box = Bodies.rectangle(p5.mouseX, p5.mouseY, 80, 80);
   boxBodyArray.current.push(box);
   // console.log("b", boxBodyArray);
-  World.add(
+  Composite.add(
     engine.current.world,
-    boxBodyArray.current[boxBodyArray.current.length - 1],
+    boxBodyArray.current[boxBodyArray.current.length - 1]
   );
+  console.log(Composite.bodies);
+  console.log(ground);
 }
