@@ -80,8 +80,8 @@ function setup(p5) {
 }
 
 function draw(p5) {
-  // console.log(p5);
   return () => {
+    // console.log("gh");
     // p5.mousePressed(() => {
     //   console.log("lk");
     // });
@@ -93,9 +93,21 @@ function draw(p5) {
     // p5.rectMode("CENTER");
     // p5.fill(255, 204, 0);
     // p5.rect(0, 0, 80, 80);
-    boxArray.forEach((box, i) => {
-      boxy(p5, boxBodyArray.current[i].x, boxBodyArray.current[i].y, 20, 20);
-    });
+    if (boxBodyArray.current) {
+      boxBodyArray.current.forEach((box, i) => {
+        console.log(
+          boxBodyArray.current[i].position.x,
+          boxBodyArray.current[i].position.y,
+        );
+        boxy(
+          p5,
+          boxBodyArray.current[i].position.x,
+          boxBodyArray.current[i].position.y,
+          20,
+          20,
+        );
+      });
+    }
     // boxy(p5, boxA.position.x, boxA.position.y, 80, 80);
     // p5.rect(0, 250, 100, 100);
     // p5.fill(255, 204, 0);
@@ -123,16 +135,16 @@ function sketch(p5) {
 function mousePressed(p5) {
   const box = Bodies.rectangle(p5.mouseX, p5.mouseY, 80, 80);
   boxBodyArray.current.push(box);
-  console.log(engine.current.world);
-  console.log("b", boxArray);
+  // console.log(engine.current.world);
+  console.log("b", boxBodyArray);
   World.add(
     engine.current.world,
     boxBodyArray.current[boxBodyArray.current.length - 1],
   );
-  boxArray.push({
-    x: boxBodyArray.current[boxBodyArray.current.length - 1].position.x,
-    y: boxBodyArray.current[boxBodyArray.current.length - 1].position.y,
-  });
+  // boxArray.push({
+  //   x: boxBodyArray.current[boxBodyArray.current.length - 1].position.x,
+  //   y: boxBodyArray.current[boxBodyArray.current.length - 1].position.y,
+  // });
   // mousePointer.current.x = p5.mouseX;
   // mousePointer.current.y = p5.mouseY;
 }
