@@ -4,7 +4,7 @@ import { Engine, Runner, World, Bodies } from "matter-js";
 import { boxy } from "../objects/box";
 
 let boxA;
-// let ground;
+let ground;
 let boxBodyArray;
 let engine;
 export default function Canvas2() {
@@ -20,11 +20,11 @@ export default function Canvas2() {
     // boxA = Bodies.rectangle(200, 100, 80, 80);
 
     // var boxB = Bodies.rectangle(450, 50, 80, 80);
-    // ground = Bodies.rectangle(0, 250, 200, 100, { isStatic: true });
+    ground = Bodies.rectangle(50, 300, 200, 50, { isStatic: true });
 
     // // add all of the bodies to the world
     // Composite.add(engine.current.world, [boxA]);
-    // World.add(engine.current.world, [boxA]);
+    World.add(engine.current.world, ground);
 
     // run the engine
     // Engine.run(engine.current);
@@ -62,6 +62,7 @@ function setup(p5) {
 
 function draw(p5) {
   return () => {
+    console.log(engine.current.world);
     p5.background(0);
     // p5.rect(100, 100, 100, 100);
     // p5.rectMode("CENTER");
@@ -82,7 +83,7 @@ function draw(p5) {
         );
       });
     }
-    // p5.rect(ground.position.x, ground.position.y, 50, 50);
+    p5.rect(ground.position.x, ground.position.y, 200, 50);
 
     // p5.noLoop();
   };
@@ -104,7 +105,7 @@ function sketch(p5) {
 function mousePressed(p5) {
   const box = Bodies.rectangle(p5.mouseX, p5.mouseY, 80, 80);
   boxBodyArray.current.push(box);
-  console.log("b", boxBodyArray);
+  // console.log("b", boxBodyArray);
   World.add(
     engine.current.world,
     boxBodyArray.current[boxBodyArray.current.length - 1],
