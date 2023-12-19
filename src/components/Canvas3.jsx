@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
-import { Engine, Render, Bodies, World, Runner } from "matter-js";
+import { Engine, Render, Bodies, World, Runner, Composite } from "matter-js";
 
 function Canvas3(props) {
-  console.log("kl");
+  console.log("klhj");
   const scene = useRef();
   const isPressed = useRef(false);
   const engine = useRef(Engine.create());
@@ -22,7 +22,7 @@ function Canvas3(props) {
       },
     });
 
-    World.add(engine.current.world, [
+    Composite.add(engine.current.world, [
       Bodies.rectangle(cw / 2, -10, cw, 20, { isStatic: true }),
       Bodies.rectangle(-10, ch / 2, 20, ch, { isStatic: true }),
       Bodies.rectangle(cw / 2, ch + 10, cw, 20, { isStatic: true }),
@@ -65,9 +65,9 @@ function Canvas3(props) {
           render: {
             fillStyle: "#0000ff",
           },
-        },
+        }
       );
-      World.add(engine.current.world, [ball]);
+      Composite.add(engine.current.world, [ball]);
     }
   };
 
