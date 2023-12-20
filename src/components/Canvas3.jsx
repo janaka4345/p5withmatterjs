@@ -44,6 +44,11 @@ function Canvas3(props) {
         isStatic: true,
         label: "wall",
       }),
+      Bodies.rectangle(cw / 2, ch / 2, 100, 20, {
+        isStatic: true,
+        label: "wall",
+        angle: Math.PI / 4,
+      }),
     ]);
     const runner = Runner.create();
     Runner.run(runner, engine.current);
@@ -150,11 +155,15 @@ function draw(p5) {
         p5.push();
         p5.rectMode(p5.CENTER);
         p5.fill(0, 255, 0);
-        p5.rect(
-          body.position.x,
-          body.position.y,
-          body.bounds.max.x - body.bounds.min.x,
-          body.bounds.max.y - body.bounds.min.y
+        p5.quad(
+          body.vertices[0].x,
+          body.vertices[0].y,
+          body.vertices[1].x,
+          body.vertices[1].y,
+          body.vertices[2].x,
+          body.vertices[2].y,
+          body.vertices[3].x,
+          body.vertices[3].y
         );
         p5.pop();
       }

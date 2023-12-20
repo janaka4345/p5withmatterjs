@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { Engine, Render, Bodies, Runner, Composite } from "matter-js";
+import { Engine, Bodies, Runner, Composite } from "matter-js";
 import { ReactP5Wrapper } from "@p5-wrapper/react";
-let scene;
+
 let isPressed;
 let engine;
 function Canvas4(props) {
-  console.log("klhj");
-  scene = useRef();
   isPressed = useRef(false);
   engine = useRef(Engine.create());
 
@@ -31,6 +29,11 @@ function Canvas4(props) {
       Bodies.rectangle(cw + 10, ch / 2, 20, ch, {
         isStatic: true,
         label: "wall",
+      }),
+      Bodies.rectangle(cw / 2, ch / 2, 100, 20, {
+        isStatic: true,
+        label: "wall",
+        angle: Math.PI / 4,
       }),
     ]);
     const runner = Runner.create();
@@ -80,9 +83,7 @@ function Canvas4(props) {
     // onMouseMove={handleAddCircle}
     // onClick={handleAddCircle}
     >
-      <div
-      // style={{ width: "100%", height: "100%" }}
-      >
+      <div style={{ width: 400, height: 400 }}>
         <ReactP5Wrapper sketch={sketch} />
       </div>
       <button onClick={() => setState((prev) => prev + 1)}>click</button>
@@ -108,6 +109,7 @@ function draw(p5) {
     engine.current.world.bodies.forEach((body) => {
       if (body.label === "box") {
         p5.push();
+
         p5.fill(255, 0, 0);
         p5.quad(
           body.vertices[0].x,
@@ -125,11 +127,15 @@ function draw(p5) {
         p5.push();
         p5.rectMode(p5.CENTER);
         p5.fill(0, 255, 0);
-        p5.rect(
-          body.position.x,
-          body.position.y,
-          body.bounds.max.x - body.bounds.min.x,
-          body.bounds.max.y - body.bounds.min.y
+        p5.quad(
+          body.vertices[0].x,
+          body.vertices[0].y,
+          body.vertices[1].x,
+          body.vertices[1].y,
+          body.vertices[2].x,
+          body.vertices[2].y,
+          body.vertices[3].x,
+          body.vertices[3].y
         );
         p5.pop();
       }
