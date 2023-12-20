@@ -4,7 +4,7 @@ import { ReactP5Wrapper } from "@p5-wrapper/react";
 let scene;
 let isPressed;
 let engine;
-function Canvas3(props) {
+function Canvas4(props) {
   console.log("klhj");
   scene = useRef();
   isPressed = useRef(false);
@@ -15,18 +15,6 @@ function Canvas3(props) {
   useEffect(() => {
     const cw = 400;
     const ch = 400;
-
-    // const render = Render.create({
-    //   element: scene.current,
-    //   engine: engine.current,
-    //   options: {
-    //     width: cw,
-    //     height: ch,
-    //     wireframes: false,
-    //     background: "transparent",
-    //   },
-    // });
-
     Composite.add(engine.current.world, [
       Bodies.rectangle(cw / 2, -10, cw, 20, {
         isStatic: true,
@@ -47,18 +35,12 @@ function Canvas3(props) {
     ]);
     const runner = Runner.create();
     Runner.run(runner, engine.current);
-    // Render.run(render);
 
     return () => {
-      // Render.stop(render);
       Runner.stop(runner);
       Composite.clear(engine.current.world, engine.current.world.bodies);
       Composite.remove(engine.current.world, engine.current.world.bodies);
       Engine.clear(engine.current);
-      // render.canvas.remove();
-      // render.canvas = null;
-      // render.context = null;
-      // render.textures = {};
     };
   }, []);
 
@@ -81,12 +63,9 @@ function Canvas3(props) {
         10 + Math.random() * 30,
         10 + Math.random() * 30,
         {
-          // mass: 10,
-          // restitution: 0.9,
-          // friction: 0.005,
-          // render: {
-          //   fillStyle: "#0000ff",
-          // },
+          mass: 10,
+          restitution: 0.9,
+          friction: 0.005,
           label: "box",
         }
       );
@@ -102,8 +81,7 @@ function Canvas3(props) {
     // onClick={handleAddCircle}
     >
       <div
-        ref={scene}
-        // style={{ width: "100%", height: "100%" }}
+      // style={{ width: "100%", height: "100%" }}
       >
         <ReactP5Wrapper sketch={sketch} />
       </div>
@@ -129,11 +107,8 @@ function draw(p5) {
     p5.background(250, 120, 0);
     engine.current.world.bodies.forEach((body) => {
       if (body.label === "box") {
-        // p5.fill(255, 0, 0);
         p5.push();
         p5.fill(255, 0, 0);
-        // p5.rectMode(p5.CENTER);
-        // p5.rotate(body.angle);
         p5.quad(
           body.vertices[0].x,
           body.vertices[0].y,
@@ -162,7 +137,8 @@ function draw(p5) {
   };
 }
 function mousePressed(p5) {
-  console.log(engine.current.world);
+  console.log(p5.mouseX, p5.mouseY);
+  console.log(p5);
   if (
     p5.mouseX > p5.canvas.width ||
     p5.mouseY > p5.canvas.height ||
@@ -171,23 +147,19 @@ function mousePressed(p5) {
   ) {
     return null;
   }
-
   const ball = Bodies.rectangle(
     p5.mouseX,
     p5.mouseY,
     10 + Math.random() * 30,
     10 + Math.random() * 30,
     {
-      // mass: 10,
-      // restitution: 0.9,
-      // friction: 0.005,
-      // render: {
-      //   fillStyle: "#0000ff",
-      // },
+      mass: 10,
+      restitution: 0.9,
+      friction: 0.005,
       label: "box",
     }
   );
   Composite.add(engine.current.world, [ball]);
 }
 
-export default Canvas3;
+export default Canvas4;
