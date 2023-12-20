@@ -51,7 +51,9 @@ function Canvas3(props) {
 
     return () => {
       // Render.stop(render);
-      Composite.clear(engine.current.world);
+      Runner.stop(runner);
+      Composite.clear(engine.current.world, engine.current.world.bodies);
+      Composite.remove(engine.current.world, engine.current.world.bodies);
       Engine.clear(engine.current);
       // render.canvas.remove();
       // render.canvas = null;
