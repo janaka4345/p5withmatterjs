@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Engine, Render, Bodies, Runner, Composite } from "matter-js";
 import { ReactP5Wrapper } from "@p5-wrapper/react";
 let scene;
@@ -10,20 +10,22 @@ function Canvas3(props) {
   isPressed = useRef(false);
   engine = useRef(Engine.create());
 
-  useEffect(() => {
-    const cw = 800;
-    const ch = 800;
+  const [state, setState] = useState(0);
 
-    const render = Render.create({
-      element: scene.current,
-      engine: engine.current,
-      options: {
-        width: cw,
-        height: ch,
-        wireframes: false,
-        background: "transparent",
-      },
-    });
+  useEffect(() => {
+    const cw = 400;
+    const ch = 400;
+
+    // const render = Render.create({
+    //   element: scene.current,
+    //   engine: engine.current,
+    //   options: {
+    //     width: cw,
+    //     height: ch,
+    //     wireframes: false,
+    //     background: "transparent",
+    //   },
+    // });
 
     Composite.add(engine.current.world, [
       Bodies.rectangle(cw / 2, -10, cw, 20, {
@@ -48,13 +50,13 @@ function Canvas3(props) {
     // Render.run(render);
 
     return () => {
-      Render.stop(render);
+      // Render.stop(render);
       Composite.clear(engine.current.world);
       Engine.clear(engine.current);
-      render.canvas.remove();
-      render.canvas = null;
-      render.context = null;
-      render.textures = {};
+      // render.canvas.remove();
+      // render.canvas = null;
+      // render.context = null;
+      // render.textures = {};
     };
   }, []);
 
@@ -68,6 +70,7 @@ function Canvas3(props) {
   };
 
   const handleAddCircle = (e) => {
+    console.log(e.clientX, e.clientY);
     // if (isPressed.current) {
     if (true) {
       const ball = Bodies.rectangle(
@@ -91,10 +94,10 @@ function Canvas3(props) {
 
   return (
     <div
-      // onMouseDown={handleDown}
-      // onMouseUp={handleUp}
-      // onMouseMove={handleAddCircle}
-      onClick={handleAddCircle}
+    // onMouseDown={handleDown}
+    // onMouseUp={handleUp}
+    // onMouseMove={handleAddCircle}
+    // onClick={handleAddCircle}
     >
       <div
         ref={scene}
@@ -102,6 +105,8 @@ function Canvas3(props) {
       >
         <ReactP5Wrapper sketch={sketch} />
       </div>
+      <button onClick={() => setState((prev) => prev + 1)}>click</button>
+      <h1>{state}</h1>
     </div>
   );
 }
@@ -110,11 +115,11 @@ function sketch(p5) {
   // p5.preload = preload(p5);
   p5.setup = setup(p5);
   p5.draw = draw(p5);
-  // p5.mousePressed = () => mousePressed(p5);
+  p5.mousePressed = () => mousePressed(p5);
 }
 function setup(p5) {
   return () => {
-    p5.createCanvas(800, 800);
+    p5.createCanvas(400, 400);
   };
 }
 function draw(p5) {
@@ -123,26 +128,52 @@ function draw(p5) {
     engine.current.world.bodies.forEach((body) => {
       if (body.label === "box") {
         // p5.fill(255, 0, 0);
+        p5.push();
+        p5.fill(255, 0, 0);
+        p5.rectMode(p5.CENTER);
+        // p5.rotate(body.angle);
         p5.rect(
           body.position.x,
           body.position.y,
           body.bounds.max.x - body.bounds.min.x,
           body.bounds.max.y - body.bounds.min.y
         );
-        p5.fill(255, 0, 0);
+        p5.pop();
       }
       if (body.label === "wall") {
-        // p5.fill(255, 0, 0);
+        p5.push();
+        p5.rectMode(p5.CENTER);
+        p5.fill(0, 255, 0);
         p5.rect(
           body.position.x,
-          body.position.y - 400,
+          body.position.y,
           body.bounds.max.x - body.bounds.min.x,
           body.bounds.max.y - body.bounds.min.y
         );
-        p5.fill(0, 255, 0);
+        p5.pop();
       }
     });
   };
+}
+function mousePressed(p5) {
+  console.log(engine.current.world);
+
+  const ball = Bodies.rectangle(
+    p5.mouseX,
+    p5.mouseY,
+    10 + Math.random() * 30,
+    10 + Math.random() * 30,
+    {
+      // mass: 10,
+      // restitution: 0.9,
+      // friction: 0.005,
+      // render: {
+      //   fillStyle: "#0000ff",
+      // },
+      label: "box",
+    }
+  );
+  Composite.add(engine.current.world, [ball]);
 }
 
 export default Canvas3;
