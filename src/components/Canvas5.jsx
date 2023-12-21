@@ -114,28 +114,33 @@ function setup(p5) {
 function draw(p5) {
   return () => {
     p5.background(250, 120, 0);
-    p5.push();
-    p5.imageMode(p5.CENTER);
-    p5.translate(cw / 2, ch / 2);
-    p5.rotate((Math.PI / 4) * Math.floor(p5.frameCount * 0.1));
-    p5.image(img, 0, 0, img.width * 0.2, img.height * 0.2);
-    p5.pop();
+    // p5.push();
+    // p5.imageMode(p5.CENTER);
+    // p5.translate(cw / 2, ch / 2);
+    // p5.rotate((Math.PI / 4) * Math.floor(p5.frameCount * 0.1));
+    // p5.image(img, 0, 0, img.width * 0.2, img.height * 0.2);
+    // p5.pop();
     engine.current.world.bodies.forEach((body) => {
       if (body.label === "box") {
         p5.push();
-
-        p5.fill(255, 0, 0);
-        p5.quad(
-          body.vertices[0].x,
-          body.vertices[0].y,
-          body.vertices[1].x,
-          body.vertices[1].y,
-          body.vertices[2].x,
-          body.vertices[2].y,
-          body.vertices[3].x,
-          body.vertices[3].y
-        );
+        p5.imageMode(p5.CENTER);
+        p5.translate(body.position.x, body.position.y);
+        p5.rotate(body.angle);
+        p5.image(img, 0, 0, img.width * 0.2, img.height * 0.2);
         p5.pop();
+        // p5.push();
+        // p5.fill(255, 0, 0);
+        // p5.quad(
+        //   body.vertices[0].x,
+        //   body.vertices[0].y,
+        //   body.vertices[1].x,
+        //   body.vertices[1].y,
+        //   body.vertices[2].x,
+        //   body.vertices[2].y,
+        //   body.vertices[3].x,
+        //   body.vertices[3].y
+        // );
+        // p5.pop();
       }
       if (body.label === "wall") {
         p5.push();
@@ -169,7 +174,7 @@ function mousePressed(p5) {
   ) {
     return null;
   }
-  const ball = Bodies.rectangle(p5.mouseX, p5.mouseY, 30, 30, {
+  const ball = Bodies.circle(p5.mouseX, p5.mouseY, img.width * 0.2 * 0.5, {
     mass: 10,
     restitution: 0.9,
     friction: 0.005,
