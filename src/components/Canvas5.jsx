@@ -13,6 +13,8 @@ import { ReactP5Wrapper } from "@p5-wrapper/react";
 let isPressed;
 let img;
 let engine;
+let cw;
+let ch;
 function Canvas5(props) {
   isPressed = useRef(false);
   engine = useRef(Engine.create());
@@ -20,8 +22,8 @@ function Canvas5(props) {
   const [state, setState] = useState(0);
 
   useEffect(() => {
-    const cw = 400;
-    const ch = 400;
+    cw = 400;
+    ch = 400;
 
     Composite.add(engine.current.world, [
       Bodies.rectangle(cw / 2, -10, cw, 20, {
@@ -112,7 +114,12 @@ function setup(p5) {
 function draw(p5) {
   return () => {
     p5.background(250, 120, 0);
-    p5.image(img, 100, 100, img.width * 0.2, img.height * 0.2);
+    p5.push();
+    p5.imageMode(p5.CENTER);
+    p5.translate(cw / 2, ch / 2);
+    p5.rotate((Math.PI / 4) * Math.floor(p5.frameCount * 0.1));
+    p5.image(img, 0, 0, img.width * 0.2, img.height * 0.2);
+    p5.pop();
     engine.current.world.bodies.forEach((body) => {
       if (body.label === "box") {
         p5.push();
@@ -150,6 +157,7 @@ function draw(p5) {
   };
 }
 function mousePressed(p5) {
+  console.log("img", img);
   console.log(p5.mouseX, p5.mouseY);
   console.log(p5);
   console.log("world", engine.current.world);
