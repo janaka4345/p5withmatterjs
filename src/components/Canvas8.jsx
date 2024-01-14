@@ -116,11 +116,14 @@ function setup(p5) {
     screen1 = p5.createGraphics(200, 200, p5.WEBGL);
     const shader1 = p5.createShader(vs, fs);
     screen1.shader(shader1);
+    // screen1.rect(0, 0, 10, 10);
+    shader1.setUniform("u_resolution", [200, 200]);
+    shader1.setUniform("u_image", explosion);
   };
 }
 function drawScreen(p5) {
-  screen1.rect(0, 0, 10, 10);
   // screen1.background("green");
+  screen1.rect(0, 0, 10, 10);
   // screen1.imageMode(p5.CENTER);
   // screen1.image(
   //   explosion,
